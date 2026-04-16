@@ -129,34 +129,33 @@ pipeline {
                 }
                 
                 sh '''
-                    echo "→ Initializing Terragrunt for ${ENVIRONMENT}..."
-                    cd environments/${ENVIRONMENT}/vpc
-                    terragrunt init -upgrade
-                    echo "✓ Terragrunt initialized"
-                '''
-                
-                sh '''
-                    echo "→ Generating Terraform plan..."
-                    cd environments/${ENVIRONMENT}/vpc
-                    terragrunt plan -out=tfplan.binary
-                    terragrunt show -json tfplan.binary > tfplan.json
-                    echo "✓ Plan generated and saved"
-                '''
+    echo "→ Initializing Terraform for ${ENVIRONMENT}..."
+    cd environments/${ENVIRONMENT}/vpc
+    terraform init
+    echo "✓ Terraform initialized"
+'''
+
+sh '''
+    echo "→ Generating Terraform plan..."
+    cd environments/${ENVIRONMENT}/vpc
+    terraform plan -out=tfplan.binary
+    echo "✓ Plan generated and saved"
+'''
                 
                 script {
-                    // Parse plan output for summary
-                    def planOutput = sh(
-                        script: '''
-                            cd environments/${ENVIRONMENT}/vpc
-                            terragrunt show -no-color tfplan.binary | grep -E "(Plan:|Destroy|Change)"
-                        ''',
-                        returnStdout: true
-                    ).trim()
-                    
-                    env.PLAN_SUMMARY = planOutput
-                    echo "Plan Summary:"
-                    echo planOutput
-                }
+    // Parse plan output for summary
+    def planOutput = sh(
+        script: '''
+            cd environments/${ENVIRONMENT}/vpc
+            terraform show tfplan.binary | grep -E "(Plan:|Destroy|Change)" || echo "Plan output captured"
+        ''',
+        returnStdout: true
+    ).trim()
+    
+    env.PLAN_SUMMARY = planOutput
+    echo "Plan Summary:"
+    echo planOutput
+}
             }
         }
         
@@ -206,18 +205,18 @@ pipeline {
                 }
                 
                 sh '''
-                    echo "→ Applying Terraform configuration..."
-                    cd environments/${ENVIRONMENT}/vpc
-                    terragrunt apply tfplan.binary
-                    echo "✓ Terraform apply completed"
-                '''
+    echo "→ Applying Terraform configuration..."
+    cd environments/${ENVIRONMENT}/vpc
+    terraform apply tfplan.binary
+    echo "✓ Terraform apply completed"
+'''
                 
                 sh '''
-                    echo "→ Capturing outputs..."
-                    cd environments/${ENVIRONMENT}/vpc
-                    terragrunt output -json > outputs.json
-                    cat outputs.json
-                '''
+    echo "→ Capturing outputs..."
+    cd environments/${ENVIRONMENT}/vpc
+    terraform output -json > outputs.json
+    cat outputs.json
+'''
                 
                 script {
                     // Capture output values
