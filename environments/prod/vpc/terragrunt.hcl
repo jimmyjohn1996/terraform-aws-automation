@@ -4,7 +4,7 @@
 # Only the values are different, not the structure
 
 include {
-  path = find_in_parent_folders()
+  path = find_in_parent_folders("terragrunt.hcl")
 }
 
 terraform {
