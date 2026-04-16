@@ -2,7 +2,7 @@
 # VPC configuration for DEV environment
 # This is a Terragrunt file that wraps the Terraform module with environment-specific values
 
-# include {
+include {
   path = find_in_parent_folders("terragrunt.hcl")
 }
 
