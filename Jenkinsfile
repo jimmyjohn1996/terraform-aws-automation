@@ -121,7 +121,7 @@ pipeline {
 sh '''
     echo "→ Generating Terraform plan..."
     cd environments/${ENVIRONMENT}/vpc
-    terraform plan -out=tfplan.binary
+    terraform plan -var-file="../terraform.tfvars" -out=tfplan.binary
     echo "✓ Plan generated and saved"
 '''
                 
