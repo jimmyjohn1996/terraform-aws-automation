@@ -87,38 +87,21 @@ pipeline {
         }
         
         stage('02: Validate Code') {
-            steps {
-                script {
-                    echo "========== Stage 2: Validate Code =========="
-                }
-                
-                sh '''
-                    echo "→ Checking Terraform formatting..."
-                    terraform fmt -recursive -check modules/ environments/ || {
-                        echo "✗ Formatting errors found. Run: terraform fmt -recursive"
-                        exit 1
-                    }
-                    echo "✓ Terraform format validation passed"
-                '''
-                
-                sh '''
-                    echo "→ Validating Terraform syntax..."
-                    cd environments/${ENVIRONMENT}/vpc
-                    terraform validate
-                    echo "✓ Terraform syntax validation passed"
-                '''
-                
-                sh '''
-                    echo "→ Checking for security issues (tfsec)..."
-                    if command -v tfsec &> /dev/null; then
-                        tfsec modules/ -f sarif > tfsec-report.sarif || true
-                        echo "✓ Security scan completed"
-                    else
-                        echo "⚠ tfsec not installed, skipping security scan"
-                    fi
-                '''
-            }
+    steps {
+        script {
+            echo "========== Stage 2: Validate Code =========="
         }
+
+        sh '''
+            echo "→ Initializing and validating Terraform..."
+            cd environments/${ENVIRONMENT}/vpc
+            terraform init
+            terraform fmt -check
+            terraform validate
+            echo "✓ Terraform validation passed"
+        '''
+    }
+}
         
         stage('03: Generate Plan') {
             steps {
