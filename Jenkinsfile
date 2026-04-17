@@ -104,7 +104,7 @@ pipeline {
                 sh '''
                     echo "→ Validating Terraform syntax..."
                     cd environments/${ENVIRONMENT}/vpc
-                    terragrunt validate
+                    terraform validate
                     echo "✓ Terraform syntax validation passed"
                 '''
                 
