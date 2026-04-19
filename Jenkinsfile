@@ -271,36 +271,11 @@ sh '''
     }
     
     post {
-        always {
-            script {
-                echo "========== Pipeline Completed =========="
-                echo "Build Status: ${currentBuild.result}"
-                echo "Duration: ${currentBuild.durationString}"
-            }
-            
-            // Clean up workspace
-            cleanWs()
-        }
-        
-        success {
-            script {
-                echo "✓ Infrastructure automation pipeline completed successfully"
-            }
-        }
-        
-        failure {
-            script {
-                echo "✗ Pipeline failed - review logs for errors"
-                
-                // Send failure notification
-                sh '''
-                    if [ ! -z "$SLACK_WEBHOOK_URL" ]; then
-                        curl -X POST $SLACK_WEBHOOK_URL \
-                            -H 'Content-Type: application/json' \
-                            -d '{"text":"Infrastructure pipeline FAILED - ${ENVIRONMENT} - Build #${BUILD_NUMBER}"}' || true
-                    fi
-                '''
-            }
+    always {
+        script {
+            echo "========== Pipeline Completed =========="
+            echo "Build Status: ${currentBuild.result}"
         }
     }
+}
 }
