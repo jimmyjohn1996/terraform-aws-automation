@@ -200,7 +200,7 @@ sh '''
     terraform output -json > outputs.json
     cat outputs.json
 '''
-                
+            }
         }
         
         stage('06: Report Results') {
