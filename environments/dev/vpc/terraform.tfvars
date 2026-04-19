@@ -7,11 +7,6 @@ public_subnet_cidrs = [
   "10.1.2.0/24",
 ]
 
-private_subnet_cidrs = [
-  "10.1.11.0/24",
-  "10.1.12.0/24",
-]
-
 availability_zones = [
   "us-east-1a",
   "us-east-1b",

@@ -30,16 +30,6 @@ variable "public_subnet_cidrs" {
   }
 }
 
-variable "private_subnet_cidrs" {
-  type        = list(string)
-  description = "List of CIDR blocks for private subnets"
-  validation {
-    condition = alltrue([
-      for cidr in var.private_subnet_cidrs : can(cidrhost(cidr, 0))
-    ])
-    error_message = "All must be valid CIDR blocks."
-  }
-}
 
 variable "availability_zones" {
   type        = list(string)
