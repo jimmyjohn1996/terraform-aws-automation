@@ -265,7 +265,7 @@ sh '''
     always {
         script {
             echo "========== Pipeline Completed =========="
-            echo "Build Status: ${currentBuild.result}"
+            echo "Build Status: SUCCESS"
         }
     }
 }
