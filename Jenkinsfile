@@ -225,15 +225,6 @@ sh '''
                     allowEmptyArchive: true
                 )
                 
-                // Publish test results if available
-                publishHTML([
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'terraform-reports',
-                    reportFiles: 'index.html',
-                    reportName: 'Terraform Report'
-                ])
                 
                 script {
                     // Prepare notification message
