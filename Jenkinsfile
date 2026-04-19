@@ -201,16 +201,6 @@ sh '''
     cat outputs.json
 '''
                 
-                script {
-                    // Capture output values
-                    def outputs = readJSON file: "environments/${ENVIRONMENT}/vpc/outputs.json"
-                    env.VPC_ID = outputs.vpc_id?.value ?: "N/A"
-                    env.SUBNETS = outputs.public_subnet_ids?.value?.join(", ") ?: "N/A"
-                    
-                    echo "VPC ID: ${VPC_ID}"
-                    echo "Subnets: ${SUBNETS}"
-                }
-            }
         }
         
         stage('06: Report Results') {
